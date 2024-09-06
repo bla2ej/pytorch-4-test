@@ -95,6 +95,9 @@ int device_count_impl(bool fail_if_no_driver) {
 
 DeviceIndex device_count() noexcept {
   // initialize number of devices only once
+  cudaDeviceProp dev_props;
+  auto err = C10_CUDA_ERROR_HANDLED(cudaGetDeviceProperties(&dev_props,0));
+  
   static int count = []() {
     try {
       auto result = device_count_impl(/*fail_if_no_driver=*/false);
